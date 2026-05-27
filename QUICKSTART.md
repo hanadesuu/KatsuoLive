@@ -1,83 +1,99 @@
-# ⚡ クイックスタートガイド
+# KatsuoLive 快速启动
 
-このガイドに従えば、5分でローカル環境を立ち上げられます！
+完整本地环境配置请看 [DEVELOPMENT_SETUP.md](./DEVELOPMENT_SETUP.md)。
 
-## 📦 事前準備
+## 前置环境
 
-以下がインストール済みであることを確認してください：
+- Node.js 18+
+- npm
+- PostgreSQL 14+
 
-- ✅ Node.js 18+
-- ✅ PostgreSQL 14+
-- ✅ npm または yarn
+## 1. 安装依赖
 
-## 🚀 3ステップで起動
-
-### ステップ 1: データベース作成
-
-```bash
-# PostgreSQL に接続
-psql -U postgres
-
-# データベース作成
-CREATE DATABASE katsuolive;
-\q
+```powershell
+npm install
 ```
 
-### ステップ 2: セットアップスクリプト実行
+## 2. 创建数据库
 
-```bash
-# 依存関係インストール
-npm install
+默认开发数据库配置：
 
-# 環境変数設定
+```text
+host: localhost
+port: 5432
+user: postgres
+password: katsuolive
+database: katsuolive
+```
+
+创建数据库：
+
+```powershell
+createdb -U postgres -h localhost -p 5432 katsuolive
+```
+
+Windows 如果 `createdb` 不在 PATH 中：
+
+```powershell
+& "C:\Program Files\PostgreSQL\16\bin\createdb.exe" -U postgres -h localhost -p 5432 katsuolive
+```
+
+## 3. 配置环境变量
+
+```powershell
+Copy-Item backend\.env.example backend\.env
+Copy-Item frontend\.env.example frontend\.env.local
+```
+
+确认后端数据库连接：
+
+```env
+DATABASE_URL="postgresql://postgres:katsuolive@localhost:5432/katsuolive?schema=public"
+```
+
+## 4. 初始化数据库
+
+```powershell
 cd backend
-cp .env.example .env
-# .env の DATABASE_URL を編集（パスワード設定）
-
-cd ../frontend  
-cp .env.example .env.local
-
-# データベースセットアップ
-cd ../backend
 npm run prisma:generate
 npm run prisma:migrate
 npm run prisma:seed
 ```
 
-### ステップ 3: サーバー起動
+导入演出数据：
 
-```bash
-# ルートディレクトリで
+```powershell
+npm run seed:zutomayo
+npm run seed:yorushika
+```
+
+也可以按需导入：
+
+```powershell
+npm run seed:aimyon
+npm run seed:yoasobi
+npm run seed:ado
+```
+
+## 5. 启动服务
+
+回到项目根目录：
+
+```powershell
+cd ..
 npm run dev
 ```
 
-## 🎉 完了！
+访问地址：
 
-以下の URL にアクセス：
+- Frontend: http://localhost:3000
+- Admin: http://localhost:3000/admin
+- Backend API: http://localhost:3001
+- Swagger: http://localhost:3001/api/docs
 
-- 🌐 **フロントエンド**: http://localhost:3000
-- 🔧 **管理画面**: http://localhost:3000/admin
-- 📚 **API ドキュメント**: http://localhost:3001/api/docs
+默认管理员：
 
-### デフォルト管理者
-
-```
+```text
 Email: admin@katsuolive.com
 Password: admin123
 ```
-
-## 📝 最初にやること
-
-1. 管理画面にログイン
-2. アーティストを追加
-3. 公演を追加
-4. 選抽情報を追加
-5. フロントエンドで確認！
-
-## 🆘 問題が発生した場合
-
-詳細なセットアップガイド: [SETUP_GUIDE.md](./SETUP_GUIDE.md)
-
----
-
-Happy Coding! 🎵

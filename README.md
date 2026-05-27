@@ -1,5 +1,7 @@
 # KatsuoLive - JPOP Live & Lottery Information Platform
 
+> 本地开发环境配置请先看 [DEVELOPMENT_SETUP.md](./DEVELOPMENT_SETUP.md)。该指南包含 PostgreSQL 安装、数据库初始化、Prisma migration、seed 数据导入和启动命令。
+
 JPOP 演出と選抽情報を管理・公開するための統合プラットフォーム
 
 ## 📋 プロジェクト概要
