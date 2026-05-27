@@ -1,0 +1,207 @@
+// Prisma Schema for KatsuoLive Platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// 用户与权限系统
+// ============================================
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  username  String   @unique
+  password  String
+  roleId    String
+  role      Role     @relation(fields: [roleId], references: [id])
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 操作记录
+  auditLogs AuditLog[]
+
+  @@map("users")
+}
+
+model Role {
+  id          String       @id @default(uuid())
+  name        String       @unique // super_admin, admin, editor, viewer
+  description String?
+  permissions Permission[]
+  users       User[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  resource    String // artist, live, lottery, document
+  action      String // create, read, update, delete
+  roles       Role[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([resource, action])
+  @@map("permissions")
+}
+
+// ============================================
+// 核心业务实体
+// ============================================
+
+model Artist {
+  id            String   @id @default(uuid())
+  nameJp        String
+  nameEn        String?
+  nameCn        String?
+  searchKeywords String[] @default([]) // Search keywords like "ztmy", "真夜中"
+  officialLinks Json? // { website, twitter, instagram, etc }
+  description   String? // 已废弃，使用多语言字段
+  descriptionJp String?
+  descriptionEn String?
+  descriptionCn String?
+  coverImage    String?
+  lives         Live[]
+  tours         Tour[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("artists")
+}
+
+model Tour {
+  id              String   @id @default(uuid())
+  artistId        String
+  artist          Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  name            String // e.g., "INTENSE II「坐・ZOMBIE CRAB LABO」"
+  description     String?
+  startDate       DateTime?
+  endDate         DateTime?
+  officialPageUrl String?
+  coverImage      String?
+  lives           Live[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([artistId])
+  @@map("tours")
+}
+
+model Live {
+  id              String        @id @default(uuid())
+  artistId        String
+  artist          Artist        @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  tourId          String?
+  tour            Tour?         @relation(fields: [tourId], references: [id], onDelete: SetNull)
+  title           String
+  dateStart       DateTime
+  dateEnd         DateTime?
+  venue           String
+  city            String
+  officialPageUrl String?
+  status          LiveStatus    @default(UPCOMING)
+  coverImage      String?
+  lotteries       LiveLottery[] // 多对多关系中间表
+  documents       Document[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([dateStart])
+  @@index([artistId])
+  @@index([tourId])
+  @@map("lives")
+}
+
+enum LiveStatus {
+  UPCOMING
+  ONGOING
+  FINISHED
+  CANCELLED
+}
+
+model Lottery {
+  id                     String           @id @default(uuid())
+  roundType              String // 最速, FC, 一般, 其他
+  requirement            String? // CD購入, FC会員 etc
+  startTime              DateTime
+  endTime                DateTime
+  sourceUrl              String?
+  notes                  String?
+  seatTypes              Json? // [{ name: "Premium Seat", price: "¥11,000" }, { name: "Reserved Seat", price: "¥9,900" }]
+  ticketLimit            Int? // 每人最多申请票数，如2或4
+  resultAnnouncementTime DateTime? // 结果发布时间
+  lives                  LiveLottery[] // 多对多关系中间表
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+
+  @@index([startTime])
+  @@map("lotteries")
+}
+
+// 中间表：演出和选抽的多对多关系
+model LiveLottery {
+  id         String   @id @default(uuid())
+  liveId     String
+  lotteryId  String
+  live       Live     @relation(fields: [liveId], references: [id], onDelete: Cascade)
+  lottery    Lottery  @relation(fields: [lotteryId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([liveId, lotteryId])
+  @@index([liveId])
+  @@index([lotteryId])
+  @@map("live_lotteries")
+}
+
+// ============================================
+// 文档系统 (Block Editor)
+// ============================================
+
+model Document {
+  id        String         @id @default(uuid())
+  liveId    String?
+  live      Live?          @relation(fields: [liveId], references: [id], onDelete: Cascade)
+  title     String
+  slug      String         @unique
+  blocks    Json // EditorJS / TipTap JSON format
+  status    DocumentStatus @default(DRAFT)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([liveId])
+  @@map("documents")
+}
+
+enum DocumentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// ============================================
+// 审计日志
+// ============================================
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  action     String // create, update, delete
+  resource   String // artist, live, lottery, document
+  resourceId String
+  changes    Json? // { before: {}, after: {} }
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([resource, resourceId])
+  @@map("audit_logs")
+}
