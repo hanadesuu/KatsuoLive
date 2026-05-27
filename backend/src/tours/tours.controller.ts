@@ -3,6 +3,8 @@ import { ApiTags, ApiOperation, ApiQuery, ApiBearerAuth } from '@nestjs/swagger'
 import { ToursService } from './tours.service';
 import { CreateTourDto, UpdateTourDto } from './dto/tour.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiTags('tours')
 @Controller('tours')
@@ -10,7 +12,8 @@ export class ToursController {
   constructor(private toursService: ToursService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('super_admin', 'admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new tour' })
   create(@Body() createTourDto: CreateTourDto) {
@@ -31,7 +34,8 @@ export class ToursController {
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('super_admin', 'admin', 'editor')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a tour' })
   update(@Param('id') id: string, @Body() updateTourDto: UpdateTourDto) {
@@ -39,7 +43,8 @@ export class ToursController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('super_admin', 'admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a tour' })
   remove(@Param('id') id: string) {

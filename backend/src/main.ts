@@ -16,8 +16,12 @@ async function bootstrap() {
   );
 
   // CORS 配置
+  const corsOrigins = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(',').map((origin) => origin.trim())
+    : ['http://localhost:3000'];
+
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: process.env.NODE_ENV === 'development' ? true : corsOrigins,
     credentials: true,
   });
 

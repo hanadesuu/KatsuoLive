@@ -70,20 +70,22 @@ export default function HomePage() {
       {/* Header */}
       <header className="bg-white shadow">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-primary-600">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Link href="/" className="shrink-0 text-xl sm:text-2xl font-bold text-primary-600">
               KatsuoLive
             </Link>
-            <div className="flex gap-6 items-center">
-              <Link href="/calendar" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+            <div className="order-3 flex w-full items-center justify-between gap-2 text-sm sm:order-2 sm:w-auto sm:justify-end sm:gap-6 sm:text-base">
+              <Link href="/calendar" className="whitespace-nowrap text-gray-700 hover:text-primary-600 font-medium transition-colors">
                 {t('nav.calendar')}
               </Link>
-              <Link href="/artists" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+              <Link href="/artists" className="whitespace-nowrap text-gray-700 hover:text-primary-600 font-medium transition-colors">
                 {t('nav.artists')}
               </Link>
-              <Link href="/admin" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+              <Link href="/admin" className="whitespace-nowrap text-gray-700 hover:text-primary-600 font-medium transition-colors">
                 {t('nav.admin')}
               </Link>
+            </div>
+            <div className="order-2 sm:order-3">
               <LanguageSwitcher />
             </div>
           </div>
@@ -91,12 +93,12 @@ export default function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary-500 to-primary-700 text-white py-20">
+      <section className="bg-gradient-to-r from-primary-500 to-primary-700 text-white py-14 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-5xl font-bold mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold mb-4 leading-tight">
             {t('hero.title')}
           </h1>
-          <p className="text-xl text-primary-100 mb-8">
+          <p className="text-lg sm:text-xl text-primary-100 mb-8">
             {t('hero.subtitle')}
           </p>
 
@@ -111,11 +113,11 @@ export default function HomePage() {
                   handleSearch(e.target.value);
                 }}
                 placeholder={t('search.placeholder')}
-                className="w-full px-6 py-4 rounded-full bg-white text-gray-950 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-white/30 shadow-lg text-lg"
+                className="w-full rounded-full bg-white py-4 pl-5 pr-24 text-base text-gray-950 placeholder-gray-400 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/30 sm:px-6 sm:pr-28 sm:text-lg"
               />
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-full font-semibold transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-primary-600 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700 sm:px-6 sm:text-base"
               >
                 {t('search.button')}
               </button>
@@ -172,7 +174,7 @@ export default function HomePage() {
       {/* Live Calendar */}
       <section className="bg-gradient-to-b from-gray-50 to-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-8 text-gray-900">{t('home.upcoming')}</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-gray-900">{t('home.upcoming')}</h2>
 
         {loading ? (
           <div className="text-center py-12">

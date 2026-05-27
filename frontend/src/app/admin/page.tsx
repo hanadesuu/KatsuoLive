@@ -75,26 +75,26 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">{t('admin.dashboard')}</h1>
+      <h1 className="mb-5 text-2xl font-bold leading-tight text-gray-900 sm:mb-8 sm:text-3xl">{t('admin.dashboard')}</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="mb-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
         {statCards.map((stat) => (
           <Link
             key={stat.name}
             href={stat.href}
-            className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow"
+            className="rounded-lg bg-white p-4 shadow transition-shadow hover:shadow-lg sm:p-6"
           >
-            <div className={`inline-block p-3 rounded-lg ${stat.color} mb-4`}>
-              <span className="text-white text-2xl">📊</span>
+            <div className={`mb-3 inline-block rounded-lg p-2.5 sm:mb-4 sm:p-3 ${stat.color}`}>
+              <span className="text-xl text-white sm:text-2xl">📊</span>
             </div>
-            <h3 className="text-gray-700 text-sm font-medium">{stat.name}</h3>
-            <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
+            <h3 className="text-sm font-medium leading-snug text-gray-700">{stat.name}</h3>
+            <p className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl">{stat.value}</p>
           </Link>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
+        <div className="rounded-lg bg-white p-4 shadow sm:p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">{t('admin.quickActions')}</h2>
           <div className="flex flex-wrap gap-2">
             <Link
@@ -118,7 +118,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="rounded-lg bg-white p-4 shadow sm:p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">{t('admin.systemInfo')}</h2>
           <dl className="space-y-2">
             <div className="flex justify-between">

@@ -25,6 +25,16 @@ async function main() {
 
   console.log('✅ Updated Yorushika cover image:', yorushika.coverImage);
 
+  // Update sample AIMYON artist cover image
+  const aimyon = await prisma.artist.update({
+    where: { id: 'sample-artist' },
+    data: {
+      coverImage: '/images/artists/aimyon.jpg',
+    },
+  });
+
+  console.log('✅ Updated AIMYON cover image:', aimyon.coverImage);
+
   console.log('🎉 Artist cover images updated successfully!');
 }
 

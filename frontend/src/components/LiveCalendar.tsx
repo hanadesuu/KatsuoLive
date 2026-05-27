@@ -192,11 +192,11 @@ export default function LiveCalendar({ lives, artistId }: LiveCalendarProps) {
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* 日历头部 */}
-      <div className="bg-white rounded-lg shadow-md p-4 mb-4">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-4">
+        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 mb-4">
           <button
             onClick={goToPreviousMonth}
-            className="px-3 py-1.5 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors font-medium"
+            className="whitespace-nowrap px-2 py-1.5 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors font-medium sm:px-3 sm:text-sm"
           >
             ← {language === 'zh' ? '上月' : language === 'ja' ? '前月' : 'Previous'}
           </button>
@@ -205,11 +205,11 @@ export default function LiveCalendar({ lives, artistId }: LiveCalendarProps) {
           <div className="relative" ref={monthPickerRef}>
             <button
               onClick={handleMonthPickerToggle}
-              className="text-xl font-bold text-gray-900 hover:text-primary-600 transition-colors px-4 py-2 rounded-md hover:bg-gray-50 flex items-center gap-2"
+              className="mx-auto flex items-center gap-1 rounded-md px-2 py-2 text-center text-lg font-bold text-gray-900 transition-colors hover:bg-gray-50 hover:text-primary-600 sm:gap-2 sm:px-4 sm:text-xl"
             >
               {monthName}
               <svg 
-                className={`w-5 h-5 transition-transform ${showMonthPicker ? 'rotate-180' : ''}`} 
+                className={`h-4 w-4 shrink-0 transition-transform sm:h-5 sm:w-5 ${showMonthPicker ? 'rotate-180' : ''}`} 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
@@ -220,7 +220,7 @@ export default function LiveCalendar({ lives, artistId }: LiveCalendarProps) {
             
             {/* 月份选择器下拉菜单 */}
             {showMonthPicker && (
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 p-4 min-w-[320px]">
+              <div className="absolute top-full left-1/2 z-50 mt-2 w-[min(20rem,calc(100vw-2rem))] -translate-x-1/2 rounded-lg border border-gray-200 bg-white p-4 shadow-xl">
                 <div className="mb-3">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     {language === 'zh' ? '选择年份' : language === 'ja' ? '年を選択' : 'Select Year'}
@@ -268,7 +268,7 @@ export default function LiveCalendar({ lives, artistId }: LiveCalendarProps) {
           
           <button
             onClick={goToNextMonth}
-            className="px-3 py-1.5 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors font-medium"
+            className="whitespace-nowrap px-2 py-1.5 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors font-medium sm:px-3 sm:text-sm"
           >
             {language === 'zh' ? '下月' : language === 'ja' ? '翌月' : 'Next'} →
           </button>
@@ -287,10 +287,10 @@ export default function LiveCalendar({ lives, artistId }: LiveCalendarProps) {
         </div>
 
         {/* 日历网格 */}
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
           {calendarDays.map((day, index) => {
             if (day === null) {
-              return <div key={`empty-${index}`} className="aspect-square" />;
+              return <div key={`empty-${index}`} className="h-11 sm:h-14" />;
             }
 
             const isSelected = selectedDate && 
@@ -309,8 +309,8 @@ export default function LiveCalendar({ lives, artistId }: LiveCalendarProps) {
                 onClick={() => handleDateClick(day)}
                 disabled={!hasEvent}
                 className={`
-                  aspect-square rounded-md flex flex-col items-center justify-center
-                  transition-all duration-200 relative text-2xl
+                  h-11 sm:h-14 rounded-md flex flex-col items-center justify-start pt-1.5
+                  transition-all duration-200 relative text-xl sm:text-2xl
                   ${hasEvent ? 'cursor-pointer hover:bg-primary-100' : 'cursor-default'}
                   ${isSelected ? 'bg-primary-600 text-white font-bold shadow-lg border-2 border-primary-700' : ''}
                   ${!isSelected && isToday ? 'bg-primary-50 text-primary-700 font-bold border-2 border-primary-400' : ''}
@@ -318,14 +318,14 @@ export default function LiveCalendar({ lives, artistId }: LiveCalendarProps) {
                   ${!hasEvent ? 'text-gray-400 bg-white border border-gray-100' : ''}
                 `}
               >
-                <span className={isSelected ? 'text-white font-bold' : hasEvent ? 'font-bold' : ''}>{day}</span>
+                <span className={`leading-none ${isSelected ? 'text-white font-bold' : hasEvent ? 'font-bold' : ''}`}>{day}</span>
                 {hasEvent && !isSelected && liveCount > 0 && (
-                  <div className="absolute bottom-1 text-xs font-bold text-red-600 bg-white rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center shadow-sm">
+                  <div className="absolute bottom-1 right-1 min-w-[0.9rem] rounded-full bg-white px-1 text-center text-[9px] font-bold leading-3 text-red-600 shadow-sm sm:min-w-[1.1rem] sm:text-[10px] sm:leading-4">
                     {liveCount}
                   </div>
                 )}
                 {hasEvent && isSelected && liveCount > 0 && (
-                  <div className="absolute bottom-1 text-xs font-bold text-primary-600 bg-white rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center shadow-sm">
+                  <div className="absolute bottom-1 right-1 min-w-[0.9rem] rounded-full bg-white px-1 text-center text-[9px] font-bold leading-3 text-primary-600 shadow-sm sm:min-w-[1.1rem] sm:text-[10px] sm:leading-4">
                     {liveCount}
                   </div>
                 )}

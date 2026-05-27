@@ -116,20 +116,22 @@ export default function CalendarPage() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-primary-600">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Link href="/" className="shrink-0 text-xl sm:text-2xl font-bold text-primary-600">
               KatsuoLive
             </Link>
-            <div className="flex gap-6 items-center">
-              <Link href="/calendar" className="text-primary-600 font-semibold">
+            <div className="order-3 flex w-full items-center justify-between gap-2 text-sm sm:order-2 sm:w-auto sm:justify-end sm:gap-6 sm:text-base">
+              <Link href="/calendar" className="whitespace-nowrap text-primary-600 font-semibold">
                 {t('nav.calendar')}
               </Link>
-              <Link href="/artists" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+              <Link href="/artists" className="whitespace-nowrap text-gray-700 hover:text-primary-600 font-medium transition-colors">
                 {t('nav.artists')}
               </Link>
-              <Link href="/admin" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+              <Link href="/admin" className="whitespace-nowrap text-gray-700 hover:text-primary-600 font-medium transition-colors">
                 {t('nav.admin')}
               </Link>
+            </div>
+            <div className="order-2 sm:order-3">
               <LanguageSwitcher />
             </div>
           </div>

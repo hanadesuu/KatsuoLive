@@ -88,20 +88,22 @@ function ArtistsContent() {
       {/* Header */}
       <header className="bg-white shadow">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-primary-600">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Link href="/" className="shrink-0 text-xl sm:text-2xl font-bold text-primary-600">
               KatsuoLive
             </Link>
-            <div className="flex gap-6 items-center">
-              <Link href="/calendar" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+            <div className="order-3 flex w-full items-center justify-between gap-2 text-sm sm:order-2 sm:w-auto sm:justify-end sm:gap-6 sm:text-base">
+              <Link href="/calendar" className="whitespace-nowrap text-gray-700 hover:text-primary-600 font-medium transition-colors">
                 {t('nav.calendar')}
               </Link>
-              <Link href="/artists" className="text-primary-600 font-semibold">
+              <Link href="/artists" className="whitespace-nowrap text-primary-600 font-semibold">
                 {t('nav.artists')}
               </Link>
-              <Link href="/admin" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+              <Link href="/admin" className="whitespace-nowrap text-gray-700 hover:text-primary-600 font-medium transition-colors">
                 {t('nav.admin')}
               </Link>
+            </div>
+            <div className="order-2 sm:order-3">
               <LanguageSwitcher />
             </div>
           </div>
@@ -213,24 +215,24 @@ function ArtistsContent() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="columns-2 gap-3 sm:gap-4 lg:columns-3 lg:gap-6">
             {artists.map((artist) => (
               <Link
                 key={artist.id}
                 href={`/artists/${artist.id}`}
-                className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group"
+                className="mb-3 inline-block w-full break-inside-avoid overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-xl sm:mb-4 lg:mb-6 group"
               >
                 {/* Artist Cover Image */}
-                <div className="aspect-square bg-gradient-to-br from-primary-400 to-primary-600 relative overflow-hidden">
+                <div className="aspect-[4/5] bg-gradient-to-br from-primary-400 to-primary-600 relative overflow-hidden sm:aspect-square">
                   {artist.coverImage ? (
                     <img
                       src={artist.coverImage}
                       alt={getArtistName(artist)}
-                      className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-7xl">👨‍🎤</span>
+                      <span className="text-4xl sm:text-7xl">👨‍🎤</span>
                     </div>
                   )}
                   {/* Overlay on hover */}
@@ -238,13 +240,13 @@ function ArtistsContent() {
                 </div>
 
                 {/* Artist Info */}
-                <div className="p-5">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+                <div className="p-3 sm:p-5">
+                  <h3 className="mb-2 text-base font-bold leading-tight text-gray-900 transition-colors group-hover:text-primary-600 sm:text-xl">
                     {getArtistName(artist)}
                   </h3>
 
                   {/* Alternative Names */}
-                  <div className="flex flex-wrap gap-1 mb-3 text-xs">
+                  <div className="mb-2 flex flex-wrap gap-1 text-[11px] sm:mb-3 sm:text-xs">
                     {language !== 'ja' && artist.nameJp && (
                       <span className="text-gray-600">🇯🇵 {artist.nameJp}</span>
                     )}
@@ -258,25 +260,25 @@ function ArtistsContent() {
 
                   {/* Description */}
                   {getArtistDescription(artist) && (
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                    <p className="mb-2 line-clamp-2 text-xs text-gray-600 sm:mb-3 sm:text-sm">
                       {getArtistDescription(artist)}
                     </p>
                   )}
 
                   {/* Keywords */}
                   {artist.searchKeywords && artist.searchKeywords.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {artist.searchKeywords.slice(0, 3).map((keyword, index) => (
+                    <div className="mb-2 flex flex-wrap gap-1 sm:mb-3">
+                      {artist.searchKeywords.slice(0, 2).map((keyword, index) => (
                         <span
                           key={index}
-                          className="px-2 py-0.5 bg-primary-50 text-primary-700 rounded text-xs"
+                          className="rounded bg-primary-50 px-1.5 py-0.5 text-[10px] text-primary-700 sm:px-2 sm:text-xs"
                         >
                           {keyword}
                         </span>
                       ))}
-                      {artist.searchKeywords.length > 3 && (
-                        <span className="text-xs text-gray-500">
-                          +{artist.searchKeywords.length - 3}
+                      {artist.searchKeywords.length > 2 && (
+                        <span className="text-[10px] text-gray-500 sm:text-xs">
+                          +{artist.searchKeywords.length - 2}
                         </span>
                       )}
                     </div>
@@ -284,7 +286,7 @@ function ArtistsContent() {
 
                   {/* Stats */}
                   {artist._count && (
-                    <div className="flex items-center gap-4 text-sm text-gray-600 pt-3 border-t border-gray-100">
+                    <div className="flex flex-col gap-1 border-t border-gray-100 pt-2 text-xs text-gray-600 sm:flex-row sm:items-center sm:gap-4 sm:pt-3 sm:text-sm">
                       <span>
                         🎤 {artist._count.lives} {language === 'zh' ? '场演出' : language === 'ja' ? '公演' : 'lives'}
                       </span>
@@ -295,12 +297,12 @@ function ArtistsContent() {
                   )}
 
                   {/* View Details Button */}
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-sm font-medium text-primary-600 group-hover:text-primary-700">
+                  <div className="mt-3 flex items-center justify-between sm:mt-4">
+                    <span className="text-xs font-medium text-primary-600 group-hover:text-primary-700 sm:text-sm">
                       {language === 'zh' ? '查看详情' : language === 'ja' ? '詳細を見る' : 'View Details'}
                     </span>
                     <svg
-                      className="w-5 h-5 text-primary-600 group-hover:translate-x-1 transition-transform"
+                      className="h-4 w-4 text-primary-600 transition-transform group-hover:translate-x-1 sm:h-5 sm:w-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
